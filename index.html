@@ -6,6 +6,35 @@
   <meta name="theme-color" content="#f5f4ef">
   <meta name="description" content="Anirban Basak — Computer Science student exploring cybersecurity, AI, and practical technology projects.">
   <title>Anirban Basak — Portfolio</title>
+  <script>
+    (() => {
+      const system = window.matchMedia('(prefers-color-scheme: dark)');
+      let saved = null;
+      try { saved = localStorage.getItem('portfolio-theme'); } catch (_) {}
+      if (saved !== 'light' && saved !== 'dark') saved = null;
+      const apply = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#111a17' : '#f5f4ef';
+        const button = document.getElementById('theme-toggle');
+        if (button) {
+          button.textContent = theme === 'dark' ? '☀ Light' : '☾ Dark';
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+      };
+      apply(saved || (system.matches ? 'dark' : 'light'));
+      system.addEventListener('change', (event) => { if (!saved) apply(event.matches ? 'dark' : 'light'); });
+      document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('theme-toggle');
+        button.hidden = false;
+        apply(document.documentElement.dataset.theme);
+        button.addEventListener('click', () => {
+          saved = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          apply(saved);
+          try { localStorage.setItem('portfolio-theme', saved); } catch (_) {}
+        });
+      });
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,6 +48,7 @@
       <a href="#work">Projects</a>
       <a href="#focus">Focus</a>
       <a class="nav-contact" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark theme" hidden>☾ Dark</button>
     </nav>
   </header>
 
